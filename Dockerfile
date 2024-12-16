@@ -20,4 +20,3 @@ RUN rm -f brainwave.zip &&\
 EXPOSE 80
 
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
