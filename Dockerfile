@@ -1,4 +1,4 @@
-FROM centos:latest
+FROM centos:8
 
 RUN rm -f /etc/yum.repos.d/*
 
