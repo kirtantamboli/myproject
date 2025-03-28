@@ -1,6 +1,6 @@
 ---
 - name: Launch Docker Container
-  hosts: docker
+  hosts: prod
   vars:
     docker_image: "jacksneel/project-1"
     docker_tag: "latest"
