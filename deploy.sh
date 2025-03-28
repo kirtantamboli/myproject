@@ -1,1 +1,1 @@
-
+ansible-playbook docker.yaml
