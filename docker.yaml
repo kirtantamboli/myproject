@@ -8,23 +8,21 @@
     host_port: "80"
     container_port: "80"
   tasks:
-    - name: Check if the container is already running
+    - name: Ensure the old container is removed
       docker_container:
         name: "{{ container_name }}"
         state: absent
-      register: container_stats
       ignore_errors: yes
 
-    - name: Remove old container if it exists
-      docker_container:
-        name: "{{ container_name }}"
-        state: absent
-
-    - name: Remove all Docker images
-      shell: docker rmi -f $(docker images -qa)
+    - name: Remove all Docker images (if any)
+      shell: |
+        images=$(docker images -q)
+        if [ ! -z "$images" ]; then
+          docker rmi -f $images
+        fi
       ignore_errors: yes
 
-    - name: Pull the Docker image
+    - name: Pull the latest Docker image
       docker_image:
         name: "{{ docker_image }}"
         tag: "{{ docker_tag }}"
@@ -35,4 +33,6 @@
         name: "{{ container_name }}"
         image: "{{ docker_image }}:{{ docker_tag }}"
         state: started
-        published_ports: "{{ host_port }}:{{ container_port }}"
+        published_ports:
+          - "{{ host_port }}:{{ container_port }}"
+        restart_policy: always
